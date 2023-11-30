@@ -72,6 +72,39 @@ class DataGroup(models.Model):
         return self.name
 
 
+class ScalingMixin(models.Model):
+    raw_lo = models.FloatField(default=0.0)
+    raw_hi = models.FloatField(default=100.0)
+    scale_lo = models.FloatField(default=0.0)
+    scale_hi = models.FloatField(default=100.0)
+    scaling_on = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+    def get_value(self, raw_value):
+        if self.scaling_on:
+            raw_range = self.raw_hi - self.raw_lo
+            scale_range = self.scale_hi - self.scale_lo
+            return scale_range/raw_range * (raw_value - self.raw_lo) + self.scale_lo
+        else:
+            return raw_value
+
+
+class LoggingMixin(models.Model):
+    logging_on = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class AnalogLoggingMixin(LoggingMixin):
+    logging_deadband = models.FloatField(default=1.0, null=True)
+
+    class Meta:
+        abstract = True
+
+
 class DataItem(models.Model):
     class Type(models.TextChoices):
         STRING = 'STRING', 'string'
@@ -90,30 +123,23 @@ class DataItem(models.Model):
         return self.name
 
 
-class StringDataItem(DataItem):
+class StringDataItem(LoggingMixin, DataItem):
     alarm_string = models.CharField(max_length=100)
 
 
-class DiscreteDataItem(DataItem):
+class DiscreteDataItem(LoggingMixin, DataItem):
     class AlarmState(models.TextChoices):
         TRUE = 'TRUE', 'true'
         FALSE = 'FALSE', 'false'
         NONE = 'NONE', 'none'
 
 
-class IntegerDataItem(DataItem):
-    scaling_on = models.BooleanField()
-    lo_scale = models.IntegerField(default=0)
-    hi_scale = models.IntegerField(default=100)
+class IntegerDataItem(ScalingMixin, LoggingMixin, DataItem):
+    pass
 
 
-class RealDataItem(DataItem):
-    scaling_on = models.BooleanField()
-    lo_scale = models.FloatField(default=0.0)
-    hi_scale = models.FloatField(default=100.0)
+class RealDataItem(ScalingMixin, AnalogLoggingMixin, DataItem):
     decimal_places = models.IntegerField(default=2)
-    logging_on = models.BooleanField(default=False)
-    logging_deadband = models.FloatField(default=1.0)
 
 
 class DataEntry(models.Model):
@@ -135,4 +161,5 @@ class IntegerDataEntry(DataEntry):
 
 
 class RealDataEntry(DataEntry):
-    value = models.FloatField()
+    value_raw = models.FloatField(null=True)
+    value = models.FloatField(null=True)
