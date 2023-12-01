@@ -64,7 +64,7 @@ class RealDataItemViewSet(viewsets.ModelViewSet):
 
 
 class RealDataEntryViewSet(viewsets.ModelViewSet):
-    queryset = RealDataEntry.objects.all()
+    queryset = RealDataEntry.objects.all().order_by('-id')
     serializer_class = GetRealDataEntrySerializer
 
     def get_serializer_class(self):
