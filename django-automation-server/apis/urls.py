@@ -8,6 +8,8 @@ from .views import (
     DataItemViewSet,
     RealDataItemViewSet,
     RealDataEntryViewSet,
+    DiscreteDataItemViewSet,
+    DiscreteDataEntryViewSet,
     TopicViewSet,
     DeviceViewSet,
     DeviceTypeViewSet,
@@ -21,6 +23,8 @@ router.register(r'users', UserViewSet)
 router.register(r'data_items', DataItemViewSet)
 router.register(r'real_data_items', RealDataItemViewSet)
 router.register(r'real_data_entries', RealDataEntryViewSet)
+router.register(r'discrete_data_items', DiscreteDataItemViewSet)
+router.register(r'discrete_data_entries', DiscreteDataEntryViewSet)
 router.register(r'mqtt_brokers', MqttBrokerViewSet)
 router.register(r'devices', DeviceViewSet)
 router.register(r'device_types', DeviceTypeViewSet)

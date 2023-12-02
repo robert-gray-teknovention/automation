@@ -7,6 +7,10 @@ from .serializers import (
     GetRealDataItemSerializer,
     GetRealDataEntrySerializer,
     RealDataEntrySerializer,
+    DiscreteDataItemSerializer,
+    DiscreteDataEntrySerializer,
+    GetDiscreteDataItemSerializer,
+    GetDiscreteDataEntrySerializer,
     GetTopicSerializer,
     TopicSerializer,
     DeviceSerializer,
@@ -23,6 +27,8 @@ from automation.models import (
     DataItem,
     RealDataItem,
     RealDataEntry,
+    DiscreteDataItem,
+    DiscreteDataEntry,
     Topic,
     MqttBroker,
     RestServer,
@@ -82,6 +88,70 @@ class RealDataEntryViewSet(viewsets.ModelViewSet):
         serializer_class = self.get_serializer_class()
         kwargs['context'] = self.get_serializer_context()
         return serializer_class(*args, **kwargs)
+
+
+class DiscreteDataItemViewSet(viewsets.ModelViewSet):
+    queryset = DiscreteDataItem.objects.all()
+    serializer_class = GetDiscreteDataItemSerializer
+
+    def get_serializer_class(self):
+        # Use SerializerForGET for GET requests
+        if self.request.method == 'GET':
+            return GetDiscreteDataItemSerializer
+        # Use SerializerForPOST for POST requests
+        elif self.request.method == 'POST' or self.request.method == 'PUT':
+            return DiscreteDataItemSerializer
+        # Use the default serializer for other HTTP methods
+        return super().get_serializer_class()
+
+    def get_serializer(self, *args, **kwargs):
+        # Override get_serializer to pass the request context to the serializer
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
+
+class DiscreteDataEntryViewSet(viewsets.ModelViewSet):
+    queryset = DiscreteDataEntry.objects.all().order_by('-id')
+    serializer_class = GetDiscreteDataEntrySerializer
+
+    def get_serializer_class(self):
+        # Use SerializerForGET for GET requests
+        if self.request.method == 'GET':
+            return GetDiscreteDataEntrySerializer
+        # Use SerializerForPOST for POST requests
+        elif self.request.method == 'POST' or self.request.method == 'PUT':
+            return DiscreteDataEntrySerializer
+        # Use the default serializer for other HTTP methods
+        return super().get_serializer_class()
+
+    def get_serializer(self, *args, **kwargs):
+        # Override get_serializer to pass the request context to the serializer
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
+
+class DiscrerteDataEntryViewSet(viewsets.ModelViewSet):
+    queryset = DiscreteDataEntry.objects.all().order_by('-id')
+    serializer_class = GetRealDataEntrySerializer
+
+    def get_serializer_class(self):
+        # Use SerializerForGET for GET requests
+        if self.request.method == 'GET':
+            return GetRealDataEntrySerializer
+        # Use SerializerForPOST for POST requests
+        elif self.request.method == 'POST' or self.request.method == 'PUT':
+            return RealDataEntrySerializer
+        # Use the default serializer for other HTTP methods
+        return super().get_serializer_class()
+
+    def get_serializer(self, *args, **kwargs):
+        # Override get_serializer to pass the request context to the serializer
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
+
 
 
 class TopicViewSet(viewsets.ModelViewSet):

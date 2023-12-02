@@ -5,6 +5,8 @@ from automation.models import (
     DataItem,
     RealDataItem,
     RealDataEntry,
+    DiscreteDataItem,
+    DiscreteDataEntry,
     Topic,
     Device,
     DeviceType,
@@ -47,6 +49,30 @@ class RealDataEntrySerializer(serializers.ModelSerializer):
 class GetRealDataEntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RealDataEntry
+        fields = '__all__'
+
+
+class DiscreteDataItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscreteDataItem
+        fields = '__all__'
+
+
+class GetDiscreteDataItemSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DiscreteDataItem
+        fields = '__all__'
+
+
+class DiscreteDataEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscreteDataEntry
+        fields = '__all__'
+
+
+class GetDiscreteDataEntrySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DiscreteDataEntry
         fields = '__all__'
 
 
