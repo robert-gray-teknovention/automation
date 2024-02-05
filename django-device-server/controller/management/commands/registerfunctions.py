@@ -1,8 +1,13 @@
 from django.core.management.base import BaseCommand
 from controller.models import Function
-import controller.functions as functions
+from django.conf import settings
+if settings.SYSTEM == 'pi':
+    import controller.functions as functions
+else:
+    import controller.pifunctions as functions
 import inspect
 import json
+print(settings.SYSTEM)
 
 
 class Command(BaseCommand):

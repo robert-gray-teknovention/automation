@@ -1,8 +1,12 @@
 from django.db import models
 import threading
-import controller.functions as functions
+
 from datetime import datetime
 from django.conf import settings
+if settings.SYSTEM == 'pi':
+    import controller.pifunctions as functions
+else:
+    import controller.functions as functions
 # Create your models here.
 
 
