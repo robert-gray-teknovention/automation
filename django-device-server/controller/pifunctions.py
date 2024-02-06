@@ -8,7 +8,7 @@ def pump_run(pump, duration, callback):
     print("Duration ", duration)
     gpio.output(pump, conf.PUMP_ON)
     time.sleep(duration)
-    # gpio.output(pump, PUMP_OFF)
+    gpio.output(pump, conf.PUMP_OFF)
     print("We are finished")
     callback()
 
